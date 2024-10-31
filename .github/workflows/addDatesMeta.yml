@@ -6,8 +6,7 @@ jobs:
   generate-json:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      deployments: write
+      contents: write
     if: ${{ github.actor != 'github-actions[bot]' && github.event_name != 'push' || github.event.pusher.name != 'github-actions[bot]' }}
     steps:
       - name: Checkout
