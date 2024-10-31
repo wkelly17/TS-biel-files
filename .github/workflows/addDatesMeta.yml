@@ -20,11 +20,12 @@ jobs:
 
       - name: Get dates meta
         run: |
-          # Generate the JSON and save to output.json
+          # Initialize the JSON string
           output=$(git ls-tree -r --name-only HEAD | grep -v '/\.' | grep -v '^\.')
           json="{"
 
-          echo "${output}" | while read -r filename; do
+          # Process each filename
+          for filename in $output; do
             date=$(git log -1 --format="%aD" -- "$filename")
             json+="\"${filename}\": \"${date}\", "
           done
@@ -33,11 +34,18 @@ jobs:
           json=${json%, }
           json+="}"
 
-          # Write to output.json
-          echo "${json}" > output.json
+          # Write to metadata.json
+          echo "${json}" > metadata.json
+
+      - name: Display metadata.json content
+        run: cat metadata.json
 
       - name: Commit if different
         run: |
-          git add output.json
-          git commit -m "Automated Update of output.json with latest file dates"
-          git push
+          if ! git diff --quiet metadata.json; then
+            git add metadata.json
+            git commit -m "Automated Update of metadata.json with latest file dates"
+            git push
+          else
+            echo "No changes to commit in metadata.json."
+          fi
