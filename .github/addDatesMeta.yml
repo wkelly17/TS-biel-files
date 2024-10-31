@@ -1,0 +1,38 @@
+name: Generate JSON on Push or PR
+
+on: [workflow_dispatch, push]
+
+jobs:
+  generate-json:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get dates meta
+      - run: |
+          # Generate the JSON and save to output.json
+          output=$(git ls-tree -r --name-only HEAD)
+          json="{"
+
+          echo "${output}" | while read -r filename; do
+            date=$(git log -1 --format="%aD" -- "$filename")
+            json+="\"${filename}\": \"${date}\", "
+          done
+
+          # Remove the trailing comma and space
+          json=${json%, }
+          json+="}"
+
+          # Write to output.json
+          echo "${json}" > output.json
+
+      - name: Commit if different
+        run: |
+          if ! git diff --quiet output.json; then
+          git config --global user.name 'Github Actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git add output.json
+          git commit -m "Automated Update of output.json with latest file dates"
+          fi
