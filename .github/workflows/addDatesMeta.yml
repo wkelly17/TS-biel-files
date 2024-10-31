@@ -20,21 +20,16 @@ jobs:
 
       - name: Get dates meta
         run: |
-          # Generate the JSON and save to metadata.json
-          output=$(git ls-tree -r --name-only HEAD | grep -v '/\.' | grep -v '^\.')
           json="{"
-
-          echo "${output}" | while read -r filename; do
+          dates=$(git ls-tree -r --name-only HEAD | grep -v '/\.' | grep -v '^\.' | while read -r filename; do
             date=$(git log -1 --format="%aD" -- "$filename")
-            json+="\"${filename}\": \"${date}\", "
-          done
-
-          # Remove the trailing comma and space
+            printf "\"${filename}\": \"${date}\", "
+          done)
+          json+=${dates}
           json=${json%, }
           json+="}"
 
-          # Write to metadata.json
-          echo "${json}" > metadata.json
+          echo "$json" > metadata.json
 
       - name: Display metadata.json content
         run: cat metadata.json
