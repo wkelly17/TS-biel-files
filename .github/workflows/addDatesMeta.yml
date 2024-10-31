@@ -9,9 +9,11 @@ jobs:
       contents: read
       deployments: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Get dates meta
-      - run: |
+        run: |
           # Generate the JSON and save to output.json
           output=$(git ls-tree -r --name-only HEAD)
           json="{"
