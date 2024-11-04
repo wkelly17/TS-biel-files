@@ -14,6 +14,9 @@ jobs:
         with:
           fetch-depth: 0 # needed for full meta history
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Set git config
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -22,15 +25,34 @@ jobs:
 
       - name: Get dates meta
         run: |
-          json="{"
-          dates=$(git ls-tree -r --name-only HEAD | grep -v '/\.' | grep -v '^\.' | while read -r filename; do
-            date=$(git log -1 --format="%aI" -- "$filename")
-            printf "\"${filename}\": \"${date}\", "
-          done)
-          json+=${dates}
-          json=${json%, }
-          json+="}"
+          # Load existing metadata.json into a variable
+          if [[ -f "metadata.json" ]]; then
+            json=$(<metadata.json)
+          else
+            json="{}"  # Start with an empty JSON if metadata.json doesn't exist
+          fi
 
+          # Use jq to ensure json is formatted correctly
+          json=$(echo "$json" | jq '.')
+
+          # Get modified files in the current commit
+          modified_files=$(git diff --name-only HEAD~1 HEAD)
+
+          # Echo modified files
+          echo "Modified files in the current commit:"
+          echo "$modified_files"
+
+          # Update dates for modified files only
+          for filename in $modified_files; do
+            # Only proceed if file exists in repo and isn't hidden or in hidden folders
+            if [[ -f "$filename" ]] && [[ ! "$filename" =~ ^\. ]] && [[ ! "$filename" =~ /\. ]]; then
+              date=$(git log -1 --format="%aI" -- "$filename")
+              # Update the JSON object with the new date for the modified file
+              json=$(echo "$json" | jq --arg file "$filename" --arg date "$date" '.[$file] = $date')
+            fi
+          done
+
+          # Save the updated JSON to metadata.json
           echo "$json" > metadata.json
 
       - name: Display metadata.json content
@@ -39,5 +61,5 @@ jobs:
       - name: Commit if different
         run: |
           git add metadata.json
-          git commit -m "Automated Update of metadata.json with latest file dates"
-          git push
+          git commit -m "Automated Update of metadata.json with latest file dates" || echo "No changes to commit"
+          git push || echo "No changes to push"
