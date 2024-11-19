@@ -13,7 +13,7 @@ async function run() {
     const metaParsed = JSON.parse(exisitingMetadataJson); //Record<string string>
     const filesModifiedArr = filesModifiedInCommit.split("\n");
     const allFilesInGitArr = filesModifiedInCommit.split("\n");
-    octokit.log.info(
+    console.log(
       `Received ${allFilesInGit.length} all files and ${filesModifiedInCommit.length} modified files`
     );
 
@@ -40,6 +40,7 @@ async function run() {
         ...github.context.repo,
         path: "metadata.json",
       });
+      console.log(existingMeta);
       // commit if the metadata has changed
       // https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents
       await octokit.rest.repos.createOrUpdateFileContents({
