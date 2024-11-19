@@ -1,0 +1,20 @@
+name: "dates-meta"
+description: "Maintain metadata of files in the repository"
+author: "Wk"
+
+runs:
+  using: "node20"
+  main: "dates.js"
+inputs:
+  token:
+    description: "Repo Access Token"
+    required: true
+  all-files:
+    description: "All files in the repo"
+    required: true
+  files-modified:
+    description: "Files modified in the current commit"
+    required: true
+  existing-meta:
+    description: "Existing metadata.json"
+    required: true

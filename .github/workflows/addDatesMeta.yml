@@ -23,40 +23,21 @@ jobs:
           git config --global user.email 'github-actions@users.noreply.github.com'
           git config --global core.quotePath false
 
-      - name: Get dates meta
+      - name: get inputs for job
         run: |
-          # Load existing metadata.json into a variable
-          if [[ -f "metadata.json" ]]; then
-            json=$(<metadata.json)
-          else
-            json="{}"  # Start with an empty JSON if metadata.json doesn't exist
-          fi
-
-          # Use jq to ensure json is formatted correctly
-          json=$(echo "$json" | jq '.')
-
-          # Get modified files in the current commit
-          modified_files=$(git diff --name-only HEAD~1 HEAD)
-
-          # Echo modified files
-          echo "Modified files in the current commit:"
-          echo "$modified_files"
-
-          # Update dates for modified files only
-          for filename in $modified_files; do
-            # Only proceed if file exists in repo and isn't hidden or in hidden folders
-            if [[ -f "$filename" ]] && [[ ! "$filename" =~ ^\. ]] && [[ ! "$filename" =~ /\. ]]; then
-              date=$(git log -1 --format="%aI" -- "$filename")
-              # Update the JSON object with the new date for the modified file
-              json=$(echo "$json" | jq --arg file "$filename" --arg date "$date" '.[$file] = $date')
-            fi
-          done
-
-          # Save the updated JSON to metadata.json
-          echo "$json" > metadata.json
-
-      - name: Display metadata.json content
-        run: cat metadata.json
+          all_files=$(git ls-tree -r --name-only HEAD)
+          files_modified=$(git diff --name-only HEAD~1 HEAD)
+          existing_meta=$(cat metadata.json)
+          echo "all_files=$all_files" >> $GITHUB_ENV
+          echo "files_modified=$files_modified" >> $GITHUB_ENV
+          echo "existing_meta=$existing_meta" >> $GITHUB_ENV
+      - name: Run dates.js
+        uses: ./actions/dates
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          all-files: ${{ env.all_files }}
+          files-modified: ${{ env.files_modified }}
+          existing-meta: ${{ env.existing_meta }}
 
       - name: Commit if different
         run: |
