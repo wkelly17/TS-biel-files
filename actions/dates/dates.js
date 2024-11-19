@@ -16,17 +16,15 @@ async function run() {
     console.log(
       `Received ${allFilesInGit.length} all files and ${filesModifiedInCommit.length} modified files`
     );
-    console.log("modified files");
-    console.log(filesModifiedInCommit);
-    console.log("all files");
-    console.log(allFilesInGit);
+
     const metaDataUpdated = allFilesInGitArr.reduce((acc, file) => {
       const isModified = filesModifiedArr.includes(file);
-      const isInExistingMeta = Object.hasOwnProperty(metaParsed, file);
-      if (isModified || !isInExistingMeta) {
+      const existingDate = metaParsed[file];
+      if (isModified || !existingDate) {
+        console.log(`Updating metadata for ${file} to new date`);
         acc[file] = new Date().toISOString();
       } else {
-        acc[file] = metaParsed[file];
+        acc[file] = existingDate;
       }
       return acc;
     }, {});
