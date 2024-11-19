@@ -14,9 +14,6 @@ jobs:
         with:
           fetch-depth: 0 # needed for full meta history
 
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
       - name: Set git config
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -24,13 +21,25 @@ jobs:
           git config --global core.quotePath false
 
       - name: get inputs for job
+        # note the herdocs for multiline outputs
         run: |
+          # Collect all files
           all_files=$(git ls-tree -r --name-only HEAD)
+          echo "all_files<<EOF" >> $GITHUB_ENV
+          echo "$all_files" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          # Collect modified files
           files_modified=$(git diff --name-only HEAD~1 HEAD)
+          echo "files_modified<<EOF" >> $GITHUB_ENV
+          echo "$files_modified" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          # Read metadata.json
           existing_meta=$(cat metadata.json)
-          echo "all_files=$all_files" >> $GITHUB_ENV
-          echo "files_modified=$files_modified" >> $GITHUB_ENV
-          echo "existing_meta=$existing_meta" >> $GITHUB_ENV
+          echo "existing_meta<<EOF" >> $GITHUB_ENV
+          echo "$existing_meta" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
       - name: Run dates.js
         uses: ./actions/dates
         with:
@@ -38,9 +47,3 @@ jobs:
           all-files: ${{ env.all_files }}
           files-modified: ${{ env.files_modified }}
           existing-meta: ${{ env.existing_meta }}
-
-      - name: Commit if different
-        run: |
-          git add metadata.json
-          git commit -m "Automated Update of metadata.json with latest file dates" || echo "No changes to commit"
-          git push || echo "No changes to push"

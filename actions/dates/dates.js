@@ -13,6 +13,9 @@ async function run() {
     const metaParsed = JSON.parse(exisitingMetadataJson); //Record<string string>
     const filesModifiedArr = filesModifiedInCommit.split("\n");
     const allFilesInGitArr = filesModifiedInCommit.split("\n");
+    octokit.log.info(
+      `Received ${allFilesInGit.length} all files and ${filesModifiedInCommit.length} modified files`
+    );
 
     const metadataUpdated = Object.entries(allFilesInGitArr).reduce(
       (acc, [key, value]) => {
