@@ -20,6 +20,8 @@ jobs:
           git config --global user.email 'github-actions@users.noreply.github.com'
           git config --global core.quotePath false
 
+      - name: install deps
+        run: npm ci
       - name: get inputs for job
         # note the herdocs for multiline outputs
         run: |
