@@ -17,9 +17,9 @@ async function run() {
       `Received ${allFilesInGit.length} all files and ${filesModifiedInCommit.length} modified files`
     );
 
-    const metadataUpdated = Object.entries(allFilesInGitArr).reduce(
+    const metadataUpdated = Object.entries(metaParsed).reduce(
       (acc, [key, value]) => {
-        if (!allFilesInGit.includes(key)) {
+        if (!allFilesInGitArr.includes(key)) {
           // If this key is in the metadata but not our project any more, don't return it;
           return acc;
         }
@@ -29,7 +29,7 @@ async function run() {
           return acc;
         }
         // file has not been updated
-        acc[key] = metaParsed[key];
+        acc[key] = value;
         return acc;
       },
       {}
