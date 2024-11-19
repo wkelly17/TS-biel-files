@@ -16,6 +16,10 @@ async function run() {
     console.log(
       `Received ${allFilesInGit.length} all files and ${filesModifiedInCommit.length} modified files`
     );
+    console.log("modified files");
+    console.log(filesModifiedInCommit);
+    console.log("all files");
+    console.log(allFilesInGit);
     const metaDataUpdated = allFilesInGitArr.reduce((acc, file) => {
       const isModified = filesModifiedArr.includes(file);
       const isInExistingMeta = Object.hasOwnProperty(metaParsed, file);
@@ -25,7 +29,7 @@ async function run() {
         acc[file] = metaParsed[file];
       }
       return acc;
-    });
+    }, {});
 
     const stringified = JSON.stringify(metaDataUpdated);
     if (stringified !== exisitingMetadataJson) {
