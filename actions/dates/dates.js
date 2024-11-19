@@ -36,13 +36,22 @@ async function run() {
     );
     const stringified = JSON.stringify(metadataUpdated);
     if (stringified !== exisitingMetadataJson) {
+      const existingMeta = await octokit.rest.repos.getContent({
+        ...github.context.repo,
+        path: "metadata.json",
+      });
       // commit if the metadata has changed
+      // https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents
       await octokit.rest.repos.createOrUpdateFileContents({
         ...github.context.repo,
         path: "metadata.json",
         message: "Automated Update of metadata.json with latest file dates",
-        content: JSON.stringify(metadataUpdated),
-        sha: github.context.sha,
+        content: Buffer.from(stringified).toString("base64"),
+        sha: existingMeta.sha,
+        committer: {
+          name: "github-actions[bot]",
+          email: "github-actions@users.noreply.github.com",
+        },
       });
     }
   } catch (error) {
