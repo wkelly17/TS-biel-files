@@ -40,7 +40,7 @@ async function run() {
         ...github.context.repo,
         path: "metadata.json",
       });
-      console.log(existingMeta);
+
       // commit if the metadata has changed
       // https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#create-or-update-file-contents
       await octokit.rest.repos.createOrUpdateFileContents({
@@ -48,7 +48,7 @@ async function run() {
         path: "metadata.json",
         message: "Automated Update of metadata.json with latest file dates",
         content: Buffer.from(stringified).toString("base64"),
-        sha: existingMeta.sha,
+        sha: existingMeta.data.sha,
         committer: {
           name: "github-actions[bot]",
           email: "github-actions@users.noreply.github.com",
