@@ -1,0 +1,37 @@
+{
+  "COBT-T": {
+    "en": "cobt-t",
+    "es-419": "cobt-t",
+    "fr": "cobt-t",
+    "id": "cobt-t",
+    "pt-br": "cobt-t"
+  },
+  "R&P": {
+    "en": "Refinement and Presentation",
+    "es-419": "Refinamiento y Presentación",
+    "fr": "Refinement et Présentation",
+    "id": "Refinement and Presentation",
+    "pt-br": "Refinamento e Apresentação"
+  },
+  "T3-FD": {
+    "en": "Train the Trainer",
+    "es-419": "Entrenamiento del Entrenador",
+    "fr": "Entrainer",
+    "id": "Train the Trainer",
+    "pt-br": "Treinador"
+  },
+  "COBT-R": {
+    "en": "cobt-r",
+    "es-419": "cobt-r",
+    "fr": "cobt-r",
+    "id": "cobt-r",
+    "pt-br": "cobt-r"
+  },
+  "CG": {
+    "en": "Conversation Guide",
+    "es-419": "Guia de Conversaciones",
+    "fr": "Guide de Conversation",
+    "id": "Conversation Guide",
+    "pt-br": "Guia de Conversa"
+  }
+}
