@@ -1,37 +1,37 @@
 {
-  "COBT-T": {
-    "en": "cobt-t",
-    "es-419": "cobt-t",
-    "fr": "cobt-t",
-    "id": "cobt-t",
-    "pt-br": "cobt-t"
+  "en": {
+    "COBT-T": "cobt-t",
+    "R&P": "Refinement and Presentation",
+    "T3-FD": "Train the Trainer",
+    "COBT-R": "cobt-r",
+    "CG": "Conversation Guide"
   },
-  "R&P": {
-    "en": "Refinement and Presentation",
-    "es-419": "Refinamiento y Presentación",
-    "fr": "Refinement et Présentation",
-    "id": "Refinement and Presentation",
-    "pt-br": "Refinamento e Apresentação"
+  "es-419": {
+    "COBT-T": "cobt-t",
+    "R&P": "Refinamiento y Presentación",
+    "T3-FD": "Entrenamiento del Entrenador",
+    "COBT-R": "cobt-r",
+    "CG": "Guia de Conversaciones"
   },
-  "T3-FD": {
-    "en": "Train the Trainer",
-    "es-419": "Entrenamiento del Entrenador",
-    "fr": "Entrainer",
-    "id": "Train the Trainer",
-    "pt-br": "Treinador"
+  "pt-br": {
+    "COBT-T": "cobt-t",
+    "R&P": "R&P",
+    "T3-FD": "T3-FD",
+    "COBT-R": "COBT-R",
+    "CG": "CG"
   },
-  "COBT-R": {
-    "en": "cobt-r",
-    "es-419": "cobt-r",
-    "fr": "cobt-r",
-    "id": "cobt-r",
-    "pt-br": "cobt-r"
+  "fr": {
+    "COBT-T": "cobt-t",
+    "R&P": "R&P",
+    "T3-FD": "T3-FD",
+    "COBT-R": "COBT-R",
+    "CG": "CG"
   },
-  "CG": {
-    "en": "Conversation Guide",
-    "es-419": "Guia de Conversaciones",
-    "fr": "Guide de Conversation",
-    "id": "Conversation Guide",
-    "pt-br": "Guia de Conversa"
+  "id": {
+    "COBT-T": "cobt-t",
+    "R&P": "R&P",
+    "T3-FD": "T3-FD",
+    "COBT-R": "COBT-R",
+    "CG": "CG"
   }
 }
